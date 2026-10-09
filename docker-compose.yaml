@@ -39,7 +39,7 @@ services:
       DATABASE_URL: ${DATABASE_URL}
 
   payment_consumer:
-    build: ./payments_consumer
+    build: ./payment_consumer
     depends_on:
       rabbit:
           condition: service_healthy
