@@ -38,7 +38,7 @@ services:
       API_KEY: ${API_KEY}
       DATABASE_URL: ${DATABASE_URL}
 
-  payments_consumer:
+  payment_consumer:
     build: ./payments_consumer
     depends_on:
       rabbit:
