@@ -52,7 +52,7 @@ class MessageRepository:
     async def check_is_processed(self, event_id: str) -> bool:
         query = select(PaymentORMSchema).where(
             PaymentORMSchema.payment_id == event_id,
-            PaymentORMSchema.status != PaymentStatus.PENDING
+            PaymentORMSchema.processed_at.is_not(None)
         )
         async with get_session() as session:
             result = await session.execute(query)

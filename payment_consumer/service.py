@@ -52,6 +52,12 @@ class MessageService:
             new_status,
             {"payment_id": payment_id}
         )
+        await self.repository.update_table_value(
+            PaymentORMSchema,
+            "processed_at",
+            datetime.now(),
+            {"payment_id": payment_id}
+        )
 
     async def publish_from_outbox(self) -> PaymentORMSchema | None:
         try:

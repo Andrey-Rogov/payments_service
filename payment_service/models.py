@@ -3,7 +3,7 @@ import uuid
 
 from datetime import datetime
 from typing import Any
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field
 from sqlalchemy import DateTime, Enum, Numeric, String, Text, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -106,7 +106,6 @@ class PaymentBase(BaseModel):
     payment_metadata: dict[str, Any] = Field(default_factory=dict)
     status: PaymentStatus
     idempotency_key: str
-    webhook_url: HttpUrl | None = HttpUrl("http://payment_service:8000/api/v1/payments/notify")
+    webhook_url: str | None = "http://payment_service:8000/api/v1/payments/notify"
     created_at: datetime = datetime.now()
     processed_at: datetime | None = None
-

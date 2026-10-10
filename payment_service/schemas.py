@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, HttpUrl
+from pydantic import BaseModel, ConfigDict
 from models import Currency, PaymentStatus
 from datetime import datetime
 
@@ -9,7 +9,7 @@ class CreatePaymentRequest(BaseModel):
     currency: Currency
     description: str
     payment_metadata: dict | None
-    webhook_url: HttpUrl | None = None
+    webhook_url: str | None = "http://payment_service:8000/api/v1/payments/notify"
 
 
 class CreatePaymentResponse(BaseModel):

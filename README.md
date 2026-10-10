@@ -30,27 +30,27 @@ API_KEY=MY_SECRET_API_KEY
 3. Swagger для FastAPI доступен по адресу `http://localhost:8000/docs`, UI RabbitMQ - `http://localhost:15672` (логин/пароль - guest/guest).
 
 ## Примеры запросов
-- Создание нового платежа
+- Создание нового платежа в консоли bash
 ```commandline
-curl -X 'POST' \
-  'http://127.0.0.1:8000/api/v1/payments/' \
-  -H 'accept: */*' \
-  -H 'X-Idempotency-Key: 7e1c39b6-ae2b-41a9-9f71-6bff5dbe49e1' \
-  -H 'X-API-Key: MY_SECRET_API_KEY' \
-  -H 'Content-Type: application/json' \
+curl -X "POST" \
+  "http://127.0.0.1:8000/api/v1/payments/" \
+  -H "accept: */*" \
+  -H "X-Idempotency-Key: 7e2c39b6-ae2b-41a9-9f71-6bff5dbe49e1" \
+  -H "X-API-Key: MY_SECRET_API_KEY" \
+  -H "Content-Type: application/json" \
   -d '{
   "amount": 10,
   "currency": "RUB",
   "description": "Subscription payment",
   "payment_metadata": {"region": "RU", "service": "Bank"},
-  "webhook_url": "http://127.0.0.1:8000/api/v1/notify"
+  "webhook_url": "http://payment_service:8000/api/v1/payments/notify"
 }'
 ```
 Создаёт запись в таблицах `payments` со статусом pending и `outbox` с sent_at = null. Далее, consumer публикует сообщение из `outbox` в Rabbit, обновляя sent_at. После попадания сообщения в очередь, оно извлекается асинхронно обрабатывается этим же consumer, эмулируя оплату и обновляя статус в `payments` в соответствии с исходом "платежа" и отправляет запрос на webhook_url в `payment_service`.
 
 - Для тестирования GET запроса можно взять ID, который возвращается после POST запроса - `payment_id`, или же достать ID любого платежа (клиент PostgreSQL или Docker Desktop не нужны):
 
-Чтобы посмтреть все текущие платеж, выполняем в консоли команду:
+Чтобы посмтреть все текущие платежи, выполняем в консоли команду:
 
 `docker compose exec postgresql psql -U postgres -d postgres -c "SELECT payment_id FROM payments;"`
 

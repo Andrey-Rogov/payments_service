@@ -18,7 +18,7 @@ async def webhook_notification(
     payment_id: Annotated[str, Query()],
     state: Annotated[PaymentStatus, Query()]
 ) -> Any:
-    logger.info(f"Received webhook response: Payment ...{payment_id[-5:]} is now in status {state}")
+    logger.info(f"Received webhook response: Payment ...{payment_id[-5:]} is now in status {state.value}")
 
 
 @payments_router.get("/{payment_id}", response_model=PaymentBase)
